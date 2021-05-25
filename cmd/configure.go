@@ -33,15 +33,13 @@ var configureCmd = &cobra.Command{
 configuração do CLI para que as conexões sejam feitas automaticamente,
 sem a necessidade ao executar todo comando digitar as credenciais.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		configurar := Falaai()
+		configurar.Configure()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(configureCmd)
-
-	configurar := salvar()
-	configurar.configure()
-
 }
 
 type dadosBanco struct {
@@ -52,7 +50,8 @@ type dadosBanco struct {
 	senha   string
 }
 
-func salvar() dadosBanco {
+// falaai solicita dados para configurado banco e retorna os dados no tipo dadosBanco
+func falaai() dadosBanco {
 	dados := dadosBanco{}
 	fmt.Print("Nome do seu banco: ")
 	fmt.Scanln(&dados.nome)
@@ -67,6 +66,7 @@ func salvar() dadosBanco {
 	return dados
 }
 
+// configure armazena as informações do usuário em um arquivo de texto.
 func (d dadosBanco) configure() {
 	texto := []byte("nome = " + d.nome + "\nhost = " + d.host + "\nport = " + d.port + "\nusuario = " + d.usuario + "\nsenha = " + d.senha)
 	home, _ := homedir.Dir()
