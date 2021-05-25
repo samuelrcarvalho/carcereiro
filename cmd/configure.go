@@ -33,8 +33,8 @@ var configureCmd = &cobra.Command{
 configuração do CLI para que as conexões sejam feitas automaticamente,
 sem a necessidade ao executar todo comando digitar as credenciais.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		configurar := Falaai()
-		configurar.Configure()
+		configurar := falaai()
+		configurar.configure()
 	},
 }
 
