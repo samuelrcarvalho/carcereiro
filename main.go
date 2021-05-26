@@ -15,8 +15,15 @@ limitations under the License.
 */
 package main
 
-import "carcereiro/cmd"
+import (
+	"carcereiro/cmd"
+	"fmt"
+)
 
 func main() {
 	cmd.Execute()
+}
+
+func Printar() {
+	fmt.Println("tsddd")
 }
