@@ -28,7 +28,7 @@ var liberarCmd = &cobra.Command{
 	Long: `Liberar acesso a uma tabela, de um database,
 para um usuario específico.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("liberar called")
+		fmt.Println("Use --help for more information.")
 	},
 }
 

@@ -25,19 +25,52 @@ import (
 // selectCmd represents the select command
 var selectCmd = &cobra.Command{
 	Use:   "select",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Liberar os comandos select no banco de dados para determinado usuário.",
+	Long: `Necessário informar database.table usuario.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+carcereiro liberar select database.table usuario`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("select called")
-		fmt.Println("Here are the arguments of card command : " + strings.Join(args, ","))
+
+		retorno := validar(args)
+		if retorno == 1 {
+			fmt.Println("Argumentos inválido, --help para mais informações.")
+		} else {
+			dadosSelect := dados{
+				args[0],
+				args[1],
+			}
+			dadosSelect.mandarVer()
+		}
 	},
 }
 
 func init() {
 	liberarCmd.AddCommand(selectCmd)
+}
+
+type dados struct {
+	bancoTabela string
+	usuario     string
+}
+
+func (d dados) mandarVer() {
+	fmt.Println(d.bancoTabela)
+	fmt.Println(d.usuario)
+}
+
+func validar(a []string) int {
+	i := 0
+	if len(a) == 0 {
+		return 1
+	}
+	for _, _ = range a {
+		if i > 1 {
+			return 1
+		}
+		i++
+	}
+	if !strings.Contains(a[0], ".") {
+		return 1
+	}
+	return 0
 }

@@ -16,11 +16,12 @@ carcereiro<br>
 
 
 Versões futuras
->&emsp;&emsp;&emsp;&emsp;update<br>
->&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
->&emsp;&emsp;&emsp;&emsp;insert<br>
->&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
->&emsp;&emsp;&emsp;&emsp;delete<br>
->&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
->&emsp;&emsp;prender<br>
->&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
+
+&emsp;&emsp;&emsp;&emsp;update<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
+&emsp;&emsp;&emsp;&emsp;insert<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
+&emsp;&emsp;&emsp;&emsp;delete<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
+&emsp;&emsp;prender<br>
+&emsp;&emsp;&emsp;&emsp;database.tabela usuario<br>
