@@ -68,7 +68,7 @@ func falaai() dadosBanco {
 
 // configure armazena as informações do usuário em um arquivo de texto.
 func (d dadosBanco) configure() {
-	texto := []byte("nome = " + d.nome + "\nhost = " + d.host + "\nport = " + d.port + "\nusuario = " + d.usuario + "\nsenha = " + d.senha)
+	texto := []byte("nome = \"" + d.nome + "\"\nhost = \"" + d.host + "\"\nport = " + d.port + "\nusuario = \"" + d.usuario + "\"\nsenha = \"" + d.senha + "\"")
 	home, _ := homedir.Dir()
 	err := os.WriteFile(home+"/.carcereiro", texto, 0600)
 	if err != nil {

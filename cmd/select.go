@@ -16,10 +16,13 @@ limitations under the License.
 package cmd
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // selectCmd represents the select command
@@ -31,6 +34,13 @@ var selectCmd = &cobra.Command{
 carcereiro liberar select database.table usuario`,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		viper.SetConfigType("toml")              // REQUIRED if the config file does not have the extension in the name
+		viper.AddConfigPath("$HOME/.carcereiro") // call multiple times to add many search paths
+		err := viper.ReadInConfig()              // Find and read the config file
+		if err != nil {                          // Handle errors reading the config file
+			panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		}
+
 		retorno := validar(args)
 		if retorno == 1 {
 			fmt.Println("Argumentos inválido, --help para mais informações.")
@@ -40,6 +50,7 @@ carcereiro liberar select database.table usuario`,
 				args[1],
 			}
 			dadosSelect.mandarVer()
+
 		}
 	},
 }
@@ -54,10 +65,13 @@ type dados struct {
 }
 
 func (d dados) mandarVer() {
-	fmt.Println(d.bancoTabela)
-	fmt.Println(d.usuario)
+	_, err := sql.Open("mysql", "usuario:password@/dbname")
+	if err != nil {
+		panic(err)
+	}
 }
 
+// validar mais de 3 parâmetros, 0 parâmetros e falta de ponto no database.table.
 func validar(a []string) int {
 	i := 0
 	if len(a) == 0 {
