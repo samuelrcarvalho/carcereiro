@@ -21,12 +21,5 @@ import (
 
 func main() {
 
-	/* 	viper.SetConfigType("toml")              // REQUIRED if the config file does not have the extension in the name
-	   	viper.AddConfigPath("$HOME/.carcereiro") // call multiple times to add many search paths
-	   	err := viper.ReadInConfig()              // Find and read the config file
-	   	if err != nil {                          // Handle errors reading the config file
-	   		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	   	} */
-
 	cmd.Execute()
 }

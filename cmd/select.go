@@ -65,9 +65,9 @@ func (d dados) mandarVer() {
 	}
 	defer db.Close()
 
-	// Teste de conexão
-	insert, err := db.Query("INSERT INTO bla (" + bancoETabela[1] + ") VALUES ( 'TEST' )")
-	defer insert.Close()
+	grant, err := db.Query("GRANT SELECT ON TABLE `" + bancoETabela[0] + "`.`" + bancoETabela[1] + "` TO '" + d.usuario + "'@'%'")
+
+	defer grant.Close()
 }
 
 // validar mais de 3 parâmetros, 0 parâmetros e falta de ponto no database.table.
