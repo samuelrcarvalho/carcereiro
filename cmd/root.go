@@ -64,9 +64,11 @@ func init() {
 func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
+
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
+		viper.SetConfigType("toml")
 		home, err := homedir.Dir()
 		cobra.CheckErr(err)
 

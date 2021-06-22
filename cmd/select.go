@@ -33,14 +33,6 @@ var selectCmd = &cobra.Command{
 
 carcereiro liberar select database.table usuario`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		viper.SetConfigType("toml")              // REQUIRED if the config file does not have the extension in the name
-		viper.AddConfigPath("$HOME/.carcereiro") // call multiple times to add many search paths
-		err := viper.ReadInConfig()              // Find and read the config file
-		if err != nil {                          // Handle errors reading the config file
-			panic(fmt.Errorf("Fatal error config file: %s \n", err))
-		}
-
 		retorno := validar(args)
 		if retorno == 1 {
 			fmt.Println("Argumentos inválido, --help para mais informações.")
@@ -50,7 +42,6 @@ carcereiro liberar select database.table usuario`,
 				args[1],
 			}
 			dadosSelect.mandarVer()
-
 		}
 	},
 }
@@ -65,10 +56,18 @@ type dados struct {
 }
 
 func (d dados) mandarVer() {
-	_, err := sql.Open("mysql", "usuario:password@/dbname")
+
+	bancoETabela := strings.Split(d.bancoTabela, ".")
+
+	db, err := sql.Open("mysql", viper.GetString("usuario")+":"+viper.GetString("senha")+"@tcp("+viper.GetString("host")+":"+viper.GetString("port")+")/"+bancoETabela[0])
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
+	defer db.Close()
+
+	// Teste de conexão
+	insert, err := db.Query("INSERT INTO bla (" + bancoETabela[1] + ") VALUES ( 'TEST' )")
+	defer insert.Close()
 }
 
 // validar mais de 3 parâmetros, 0 parâmetros e falta de ponto no database.table.
