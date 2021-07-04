@@ -6,7 +6,23 @@ Hoje tenho necessidade de fazer liberações constantes de acesso a base de dado
 
 Primeiro projeto após [curso da Ellen Korbers](https://www.youtube.com/channel/UCxD5EE0H7qOhRr0tIVsOZPQ) de Golang. Fazer em shellscript seriam bem tranquilo, mas vamos aprender melhor uma nova linguagem.
 
-## Estrutura
+# How to use
+
+## Configure
+Antes de executar liberações, deve-se configurar o contexto de acesso, incluindo o host e as credenciais.
+```
+carcereiro configure
+```
+Será solicitado dados que permitem conexão com a base.
+Ainda não está aceitando múltiplos contextos, mas assim que eu começar a ter essa necessidade faço.
+
+## Executar liberação de acesso
+```
+carcereiro liberar select database.table(,database2.table2) user
+```
+Aceita multiplos databases e tables.
+
+## Estrutura do CLI
 
 carcereiro<br>
 &emsp;&emsp;configure<br>
