@@ -16,13 +16,11 @@ limitations under the License.
 package cmd
 
 import (
-	"database/sql"
 	"fmt"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // selectCmd represents the select command
@@ -37,37 +35,18 @@ carcereiro liberar select database.table usuario`,
 		if retorno == 1 {
 			fmt.Println("Argumentos inválido, --help para mais informações.")
 		} else {
-			dadosSelect := dados{
+			dadosSelect := aplicarDados{
 				args[0],
 				args[1],
+				"select",
 			}
-			dadosSelect.mandarVer()
+			dadosSelect.aplicarAlteracao()
 		}
 	},
 }
 
 func init() {
 	liberarCmd.AddCommand(selectCmd)
-}
-
-type dados struct {
-	bancoTabela string
-	usuario     string
-}
-
-func (d dados) mandarVer() {
-
-	bancoETabela := strings.Split(d.bancoTabela, ".")
-
-	db, err := sql.Open("mysql", viper.GetString("usuario")+":"+viper.GetString("senha")+"@tcp("+viper.GetString("host")+":"+viper.GetString("port")+")/"+bancoETabela[0])
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-
-	grant, err := db.Query("GRANT SELECT ON TABLE `" + bancoETabela[0] + "`.`" + bancoETabela[1] + "` TO '" + d.usuario + "'@'%'")
-
-	defer grant.Close()
 }
 
 // validar mais de 3 parâmetros, 0 parâmetros e falta de ponto no database.table.

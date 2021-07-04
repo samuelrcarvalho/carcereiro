@@ -16,8 +16,8 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"os"
+	"database/sql"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -81,6 +81,38 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		//fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+type aplicarDados struct {
+	bancoTabela string
+	usuario     string
+	tipo        string
+}
+
+func (aD aplicarDados) aplicarAlteracao() {
+
+	bancoETabela := strings.Split(aD.bancoTabela, ".")
+	// temporario fixo
+	db, err := sql.Open("mysql", viper.GetString("usuario")+":"+viper.GetString("senha")+"@tcp("+viper.GetString("host")+":"+viper.GetString("port")+")/"+bancoETabela[0])
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	grant, err := db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
+	if err != nil {
+		panic(err.Error())
+	}
+	defer grant.Close()
+}
+
+func montaQuery(tipo string, banco string, tabela string, usuario string) string {
+	var saida string
+	switch tipo {
+	case "select":
+		saida = "GRANT SELECT ON TABLE `" + banco + "`.`" + tabela + "` TO '" + usuario + "'@'%'"
+	}
+	return saida
 }
