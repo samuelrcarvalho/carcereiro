@@ -111,11 +111,12 @@ func (aD aplicarDados) aplicarAlteracao() string {
 	if checkUsuario == "" {
 		mensagem = "Usuário " + aD.usuario + " não existe!"
 	} else {
-		_, err = db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
+		_, err := db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
 		if err != nil {
-			panic(err.Error())
+			mensagem = err.Error()
+		} else {
+			mensagem = "Executado com sucesso!"
 		}
-		mensagem = "Executado com sucesso!"
 	}
 
 	return mensagem
