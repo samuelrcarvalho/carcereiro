@@ -38,9 +38,10 @@ carcereiro liberar select database.table usuario`,
 			dadosSelect := aplicarDados{
 				args[0],
 				args[1],
-				"select",
+				"grantSelect",
 			}
-			dadosSelect.aplicarAlteracao()
+			mensagem := dadosSelect.aplicarAlteracao()
+			fmt.Println(mensagem)
 		}
 	},
 }

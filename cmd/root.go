@@ -91,7 +91,11 @@ type aplicarDados struct {
 	tipo        string
 }
 
-func (aD aplicarDados) aplicarAlteracao() {
+// aplicarAlteracao conecta no banco e executa o que tiver que executar, mas valida se usuário já existe.
+func (aD aplicarDados) aplicarAlteracao() string {
+
+	var checkUsuario string
+	var mensagem string
 
 	bancoETabela := strings.Split(aD.bancoTabela, ".")
 	// temporario fixo
@@ -101,17 +105,27 @@ func (aD aplicarDados) aplicarAlteracao() {
 	}
 	defer db.Close()
 
-	grant, err := db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
-	if err != nil {
-		panic(err.Error())
+	// Valida se usuário existe
+	_ = db.QueryRow("SELECT user FROM mysql.user WHERE user = '" + aD.usuario + "';").Scan(&checkUsuario)
+
+	if checkUsuario == "" {
+		mensagem = "Usuário " + aD.usuario + " não existe!"
+	} else {
+		_, err = db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
+		if err != nil {
+			panic(err.Error())
+		}
+		mensagem = "Executado com sucesso!"
 	}
-	defer grant.Close()
+
+	return mensagem
 }
 
+// montaQuery cria a query para entregar para execução.
 func montaQuery(tipo string, banco string, tabela string, usuario string) string {
 	var saida string
 	switch tipo {
-	case "select":
+	case "grantSelect":
 		saida = "GRANT SELECT ON TABLE `" + banco + "`.`" + tabela + "` TO '" + usuario + "'@'%'"
 	}
 	return saida
