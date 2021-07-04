@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"database/sql"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -92,34 +93,38 @@ type aplicarDados struct {
 }
 
 // aplicarAlteracao conecta no banco e executa o que tiver que executar, mas valida se usuário já existe.
-func (aD aplicarDados) aplicarAlteracao() string {
+func (aD aplicarDados) aplicarAlteracao() {
 
 	var checkUsuario string
-	var mensagem string
 
-	bancoETabela := strings.Split(aD.bancoTabela, ".")
-	// temporario fixo
-	db, err := sql.Open("mysql", viper.GetString("usuario")+":"+viper.GetString("senha")+"@tcp("+viper.GetString("host")+":"+viper.GetString("port")+")/"+bancoETabela[0])
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
+	// Multiplas tabelas
+	tabelas := strings.Split(aD.bancoTabela, ",")
 
-	// Valida se usuário existe
-	_ = db.QueryRow("SELECT user FROM mysql.user WHERE user = '" + aD.usuario + "';").Scan(&checkUsuario)
+	for _, i := range tabelas {
 
-	if checkUsuario == "" {
-		mensagem = "Usuário " + aD.usuario + " não existe!"
-	} else {
-		_, err := db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
+		bancoETabela := strings.Split(i, ".")
+		// temporario fixo
+		db, err := sql.Open("mysql", viper.GetString("usuario")+":"+viper.GetString("senha")+"@tcp("+viper.GetString("host")+":"+viper.GetString("port")+")/"+bancoETabela[0])
 		if err != nil {
-			mensagem = err.Error()
-		} else {
-			mensagem = "Executado com sucesso!"
+			panic(err.Error())
 		}
-	}
+		defer db.Close()
 
-	return mensagem
+		// Valida se usuário existe
+		_ = db.QueryRow("SELECT user FROM mysql.user WHERE user = '" + aD.usuario + "';").Scan(&checkUsuario)
+
+		if checkUsuario == "" {
+			fmt.Println("Usuário " + aD.usuario + " não existe!")
+		} else {
+			_, err := db.Query(montaQuery(aD.tipo, bancoETabela[0], bancoETabela[1], aD.usuario))
+			if err != nil {
+				fmt.Println(err.Error())
+			} else {
+				fmt.Println(i + " OK!")
+			}
+		}
+
+	}
 }
 
 // montaQuery cria a query para entregar para execução.

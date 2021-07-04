@@ -27,9 +27,11 @@ import (
 var selectCmd = &cobra.Command{
 	Use:   "select",
 	Short: "Liberar os comandos select no banco de dados para determinado usuário.",
-	Long: `Necessário informar database.table usuario.
+	Long: `- Necessário informar database.table usuario.
+- É possível liberar várias tabelas ao mesmo tempo, usando virgula para separação.
 
-carcereiro liberar select database.table usuario`,
+carcereiro liberar select database.table(,database2.table2) usuario`,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		retorno := validar(args)
 		if retorno == 1 {
@@ -40,8 +42,7 @@ carcereiro liberar select database.table usuario`,
 				args[1],
 				"grantSelect",
 			}
-			mensagem := dadosSelect.aplicarAlteracao()
-			fmt.Println(mensagem)
+			dadosSelect.aplicarAlteracao()
 		}
 	},
 }
